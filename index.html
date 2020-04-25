@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Form JSON & PARSE</title>
+</head>
+<body>
+    <div class="container text-center">
+        <form id="contactform">
+            <h3>Submit Form</h3>
+            <div class="form-group">
+                    <label for="exampleFormControlInput1">
+                        <span>Email Address</span>
+						<span class="border"></span></label>
+                <input type="email" name="email" class="form-control" id="exampleFormControlInput1" value="" required>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1"><span>Example Select</span>
+                    <span class="border"></span></label>
+                <select name="select" id="exampleFormControlSelect1" class="form-control" required>
+                    <option >1</option>
+                    <option >2</option>
+                    <option >3</option>
+                    <option >4</option>
+                    <option selected>5</option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect2" class="" id=""><span>Example Multiple Select</span>
+                    <span class="border"></span></label>
+                <select name="multiple" id="exampleFormControlSelect2" class="form-control" required>
+                    <option selected>1</option>
+                    <option >2</option>
+                    <option >3</option>
+                    <option >4</option>
+                    <option >5</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="examleFormControlTextarea1"><span>Example Text Area</span>
+                    <span class="border"></span></label>
+                <textarea name="text" id="examleFormControlTextarea1" class="form-control"  rows="3" required></textarea>
+            </div>
+            <button type="button" class="btn btn-primary httpbin">Submit<i class="zmdi zmdi-arrow-right"></i></button>
+            
+        </form>
+        <br />
+        <div class="result"></div>
+    </div>
+    <script src="./jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.httpbin').click(function(){
+                var datastring=$('#contactform').serialize();
+                console.log(datastring)
+                $.ajax({
+                    type:'POST',
+                    url:'https://httpbin.org/post',
+                    data:datastring,
+                    dataType:'json',
+                    success:function(data){
+                        var obj=JSON.stringify(data);
+                        console.log(obj,data)
+                        // $('.result').append('<div class="alert alert-success"><ul class="list-group"><li class="list-group-item active">Result JSON</li><li class="list-group-item><textarea class="form-control" rows="3">' +obj +'</textarea></li><li class="list-group-item active">Result Parse</li<li class="list-group-item>Email: ' + data['form']['email']'</li><li class="list-group-item>Select: ' + data['form']['select']'</li><li class="list-group-item>Multiple: ' + data['form']['multiple']'</li><li class="list-group-item>Text: ' + data['form']['text'] + '</li></ul></div>')
+                        $('.result').append('<div class="alert alert-success"><ul class="list-group"><li class="list-group-item active">Result JSON</li><li class="list-group-item"><textarea class="form-control" rows="3">'+obj+'</textarea></li><li class="list-group-item active">Result Parse</li><li class="list-group-item">Email: '+data['form']['email'] +'</li><li class="list-group-item">Select: '+data['form']['select']+'</li><li class="list-group-item">Multiple: '+data['form']['multiple']+'</li><li class="list-group-item">Text: '+data['form']['text']+'</li></ul></div>');
+                    },
+                error:function(){
+                    $('.result').append('Error Handing Here')
+                }             
+                })
+            })
+        })
+    </script>
+</body>
+</html>
